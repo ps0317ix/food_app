@@ -1,0 +1,56 @@
+<div class="main places-index">
+  <div class="container">
+
+    <p>検索</p>
+    <%= form_tag("/search_exe",:method => 'get') do %>
+      <%= text_field_tag :search %>
+      <%= submit_tag 'Search', :name => nil %>
+    <% end %>
+    <ul>
+      <h3>食べログ</h3>
+      <%
+        @places.each do |place|
+        if place.service == '食べログ' %>
+        <li>
+          <p><%= link_to "#{place.name}エリアのランキング", place.link %></p>
+        </li>
+        <% end
+       end %>
+    </ul>
+    <ul>
+      <h3>Retty</h3>
+      <% @places.each do |place|
+        if place.service == 'Retty' %>
+        <li>
+          <p><%= link_to "#{place.name}エリアのランキング", place.link %></p>
+        </li>
+      <% end
+       end
+      %>
+    </ul>
+
+    <%
+    if params[:search]
+      @places.each do |place|
+        %>
+        <div class="" style="padding-top:50px;">
+        <h3><%= place.service %></h3>
+        <%
+        if place.service == 'Retty' then
+          @tabelogContents.each do |tabelogContent| %>
+            <p><%= tabelogContent.xpath %></p>
+        <% end
+        elsif place.service == '食べログ' then
+          @tabelogContents.each do |content| %>
+          <% tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
+            tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
+          <%= link_to tabelogTitle.text, tabelogTitle.attribute("href").text %>
+          <img src="<%= tabelogImg %>">
+          <% end
+        end
+        %></div><%
+      end
+    end
+    %>
+  </div>
+</div>

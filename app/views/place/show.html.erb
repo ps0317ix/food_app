@@ -1,0 +1,51 @@
+<div class="main user-show">
+  <div class="container">
+    <%
+    @places.each do |place|
+      %>
+      <div class="" style="padding-top:50px;">
+      <h3><%= place.service %></h3>
+
+      <%
+      if @tabelog
+        @tabelogTitles.each do |tabelogtitle|
+        %>
+          <p><%= tabelogtitle.text %></p>
+        <%
+        end
+        @tabelogImgs.each do |tabelogImg|%>
+        <p><%= tabelogImg %></p>
+          <img src="<%= "#{tabelogImg}" %>" alt="">
+      <% end
+      end
+      if @retty
+        @rettyTitles.each do |title|
+        %>
+          <p><%= title.text %></p>
+        <%
+        end
+      %></div><%
+      end
+    end
+
+    link = "https://tabelog.com/tokyo/A1312/A131201/R3373/rstLst/?SrtT=rt&Srt=D&sort_mode=1"
+    charset = nil
+
+    html = open(link) do |page|
+      #charsetを自動で読み込み、取得
+      charset = page.charset
+      #中身を読む
+      page.read
+    end
+
+    # Nokogiri で切り分け
+    @tabelogDoc = Nokogiri::HTML(open(link))
+    @tabelogImgs = @tabelogDoc.xpath("//img[@class='js-thumbnail-img']").attribute('src')
+    
+    @tabelogImgs.each do |tabelogImg| %>
+    <p>テスト</p>
+    <p><%= tabelogImgs.value %></p>
+      <img src="<%= tabelogImgs.value %>" alt="">
+  <% end %>
+  </div>
+</div>
