@@ -15,9 +15,8 @@ class PlaceController < ApplicationController
     @tabelog = Place.find_by(name: params[:name], service: "食べログ")
     @retty = Place.find_by(name: params[:name], service: "Retty")
     @tabelogContents = Place.tabelogContents(params[:name])
-    @tabelogTitles = Place.tabelogTitles(params[:name])
-    @tabelogImgs = Place.tabelogImgs(params[:name])
     @rettyTitles = Place.rettyTitles(params[:name])
+    @ikkyuTitles = Place.ikkyuTitles(params[:name])
   end
 
   def create

@@ -32,7 +32,6 @@ class Place < ApplicationRecord
   end
 
   def self.tabelogTitles(name)
-    # @tabelog = Place.services()
     if @tabelog = Place.find_by(name: name, service: "食べログ")
       @tabelogUrl = @tabelog.link
       @tabelogDoc = Place.getDoc(@tabelogUrl)
@@ -47,7 +46,6 @@ class Place < ApplicationRecord
   end
 
   def self.tabelogContents(name)
-    # @tabelog = Place.services()
     if @tabelog = Place.find_by(name: name, service: "食べログ")
       @tabelogUrl = @tabelog.link
       @tabelogDoc = Place.getDoc(@tabelogUrl)
@@ -120,7 +118,6 @@ class Place < ApplicationRecord
   end
 
   def self.rettyContents(name)
-    # @tabelog = Place.services()
     if @retty = Place.find_by(name: name, service: "Retty")
       @rettyUrl = @retty.link
       @rettyDoc = Place.getDoc(@rettyUrl)
@@ -130,11 +127,10 @@ class Place < ApplicationRecord
   end
 
   def self.ikkyuContents(name)
-    # @tabelog = Place.services()
     if @ikkyu = Place.find_by(name: name, service: "一休")
-      @ikkyuUrl = @ikkyu.link
-      @ikkyuDoc = Place.getDoc(@ikkyuUrl)
-      @ikkyuContents = @ikkyuDoc.xpath("//section[@class='restaurantName_2s_sg']")
+      ikkyuUrl = @ikkyu.link
+      @ikkyuDoc = Place.getDoc(ikkyuUrl)
+      @ikkyuContents = @ikkyuDoc.xpath("//section[@class='restaurantCard_jpBMy']")
       return @ikkyuContents
     end
   end
@@ -144,8 +140,8 @@ class Place < ApplicationRecord
     if @ikkyu = Place.find_by(name: name, service: "一休")
       @ikkyuUrl = @ikkyu.link
       @ikkyuDoc = Place.getDoc(@ikkyuUrl)
-      @ikkyuContents = @ikkyuDoc.xpath("//h3[@class='restaurantName_2s_sg']")
-      return @ikkyuContents
+      @ikkyuTitles = @ikkyuDoc.xpath("//h3[@class='restaurantName_2s_sg']")
+      return @ikkyuTitles
     end
   end
 

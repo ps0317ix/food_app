@@ -21,31 +21,17 @@
       end
       if place.service == 'Retty' %>
       <%  @rettyTitles.each do |title| %>
-
+          <p><%= title.text %></p>
+        <%
+        end
+      end
+      if place.service == '一休' %>
+      <%  @ikkyuTitles.each do |title| %>
           <p><%= title.text %></p>
         <%
         end
       %></div><%
       end
-    end
-
-    link = "https://retty.me/restaurant-search/search-result/?latlng=35.689729%2C139.700464&free_word_area=%E6%96%B0%E5%AE%BF%E9%A7%85&station_id=1376"
-    charset = nil
-
-    html = open(link) do |page|
-      #charsetを自動で読み込み、取得
-      charset = page.charset
-      #中身を読む
-      page.read
-    end
-
-    # Nokogiri で切り分け
-    @tabelogDoc = Nokogiri::HTML(open(link))
-    @tabelogImgs = @tabelogDoc.xpath("//h3[@class='restaurant__name']")
-
-    @tabelogImgs.each do |tabelogImg| %>
-    <p>テスト</p>
-      <p><%= tabelogImgs.text %></p>
-  <% end %>
+    end %>
   </div>
 </div>
