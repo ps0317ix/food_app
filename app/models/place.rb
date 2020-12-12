@@ -1,3 +1,7 @@
+# プレイスクラス
+# 製作日 2020/11/29
+# 更新日 2020/12/12
+
 class Place < ApplicationRecord
   validates :name, {presence: true}
 

@@ -6,28 +6,7 @@
       <%= text_field_tag :search %>
       <%= submit_tag 'Search', :name => nil %>
     <% end %>
-    <ul>
-      <h3>食べログ</h3>
-      <%
-        @places.each do |place|
-        if place.service == '食べログ' %>
-        <li>
-          <p><%= link_to "#{place.name}エリアのランキング", place.link %></p>
-        </li>
-        <% end
-       end %>
-    </ul>
-    <ul>
-      <h3>Retty</h3>
-      <% @places.each do |place|
-        if place.service == 'Retty' %>
-        <li>
-          <p><%= link_to "#{place.name}エリアのランキング", place.link %></p>
-        </li>
-      <% end
-       end
-      %>
-    </ul>
+
 
     <%
     if params[:search]
@@ -40,17 +19,52 @@
           @tabelogContents.each do |tabelogContent| %>
             <p><%= tabelogContent.xpath %></p>
         <% end
-        elsif place.service == '食べログ' then
+      elsif place.service == '食べログ' then %>
+      <ul>
+      <% @cnt = 1
           @tabelogContents.each do |content| %>
           <% tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
             tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
-          <%= link_to tabelogTitle.text, tabelogTitle.attribute("href").text %>
-          <img src="<%= tabelogImg %>">
-          <% end
+          <li>
+            <p><%= @cnt %>位　<%= link_to tabelogTitle.text, tabelogTitle.attribute("href").text %></p>
+            <img src="<%= tabelogImg %>">
+          </li>
+          <% @cnt += 1
+          end
         end
-        %></div><%
+        %></ul>
+      </div><%
       end
-    end
+    else %>
+      <div class="available">
+        <h3>検索可能エリア一覧</h3>
+        <% @allPlaces.each do |place|%>
+          <%= link_to "#{place.name}", "/search_exe?utf8=✓&search=#{place.name}" %>
+    <% end %>
+    </div>
+    <% end
     %>
+    <ul>
+      <h3>食べログのランキングページ一覧</h3>
+      <%
+        @allPlaces.each do |place|
+        if place.service == '食べログ' %>
+          <li>
+            <p><%= link_to "#{place.name}エリアのランキングページはこちら", place.link %></p>
+          </li>
+        <% end
+       end %>
+    </ul>
+    <ul>
+      <h3>Rettyのランキングページ一覧</h3>
+      <% @allPlaces.each do |place|
+        if place.service == 'Retty' %>
+        <li>
+          <p><%= link_to "#{place.name}エリアのランキングページはこちら", place.link %></p>
+        </li>
+      <% end
+       end
+      %>
+    </ul>
   </div>
 </div>

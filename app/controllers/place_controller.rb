@@ -31,6 +31,7 @@ class PlaceController < ApplicationController
   end
 
   def search
+    @allPlaces = Place.all
     if params[:search]
       @places = Place.search(params[:search])
       @services = Place.services(params[:search])

@@ -1,3 +1,6 @@
+# 製作日 2020/11/29
+# 更新日 2020/12/12
+
 #webに接続するためのライブラリ
 require "open-uri"
 #クレイピングに使用するライブラリ
@@ -24,6 +27,12 @@ class ApplicationController < ActionController::Base
       redirect_to("/posts/index")
     end
   end
+
+  def allPlace
+    @allPlaces = Place.all
+  end
+
+
 
 
 end

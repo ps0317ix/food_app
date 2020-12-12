@@ -1,3 +1,6 @@
+# 製作日 2020/11/29
+# 更新日 2020/12/9
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 

@@ -1,9 +1,33 @@
 <div class="main top-main">
   <div class="top-message">
+    <p>東京の主要駅を入力して検索</p>
+    <%= form_tag("/search_exe",:method => 'get') do %>
+      <%= text_field_tag :search %>
+      <%= submit_tag 'Search', :name => nil %>
+    <% end %>
     <!-- <div id="app">
       <p :class="classObject">Hello</p>
       <button @click="isActive = !isActive">switch</button>
     </div> -->
+  </div>
+  <div class="">
+
+    <div class="top-ranking" style="padding-top:50px;">
+      <h3>東京の食べログランキング</h3>
+      <ul>
+      <% @cnt = 1
+          @tabelogContents.each do |content| %>
+          <% tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
+            tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
+          <li>
+            <p><%= @cnt %>位　<%= link_to tabelogTitle.text, tabelogTitle.attribute("href").text %></p>
+            <img src="<%= tabelogImg %>">
+          </li>
+          <% @cnt += 1
+          end
+        %>
+      </ul>
+    </div>
   </div>
 </div>
 
