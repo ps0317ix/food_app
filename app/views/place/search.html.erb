@@ -14,22 +14,38 @@
         %>
         <div class="" style="padding-top:50px;">
         <h3><%= place.service %></h3>
+        <ul>
         <%
         if place.service == 'Retty' then
-          @tabelogContents.each do |tabelogContent| %>
-            <p><%= tabelogContent.xpath %></p>
-        <% end
-      elsif place.service == '食べログ' then %>
-      <ul>
-      <% @cnt = 1
-          @tabelogContents.each do |content|
-           tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
-           tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
+          @rettyContents.each do |rettyContent| %>
           <li>
-            <p><%= @cnt %>位　<%= link_to tabelogTitle.text, tabelogTitle.attribute("href").text %></p>
-            <img src="<%= tabelogImg %>">
+            <p><%= rettyContent.xpath("//h3[@class='restaurant__name']").text %></p>
           </li>
-          <% @cnt += 1
+        <% end
+        end
+        if place.service == '食べログ' then %>
+            <% @cnt = 1
+            @tabelogContents.each do |tabelogContent|
+             tabelogTitle = tabelogContent.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
+             tabelogImg = tabelogContent.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
+            <li>
+              <p><%= @cnt %>位　<%= link_to tabelogTitle.text, tabelogTitle.attribute("href").text %></p>
+              <img src="<%= tabelogImg %>">
+            </li>
+            <% @cnt += 1
+          end
+        end
+        if place.service == '一休' then %>
+            <% @cnt = 1
+            @ikkyuContents.each do |content|
+             ikkyuhref = content.xpath(".//a[@class='cover_3Ae77']").attribute("href")
+             ikkyuTitle = content.xpath(".//h3[@class='restaurantName_2s_sg']")
+             ikkyuImg = content.xpath(".//img[@alt='#{ikkyuTitle}']").attribute("src") %>
+            <li>
+              <p><%= @cnt %>位　<%= link_to ikkyuTitle.text, ikkyuhref.text %></p>
+              <img src="<%= ikkyuImg %>">
+            </li>
+            <% @cnt += 1
           end
         end
         %></ul>

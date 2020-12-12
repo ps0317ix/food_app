@@ -38,9 +38,8 @@ class PlaceController < ApplicationController
       @places = Place.search(params[:search])
       @services = Place.services(params[:search])
       @tabelogContents = Place.tabelogContents(params[:search])
-      @tabelogTitles = Place.tabelogTitles(params[:search])
-      @tabelogImgs = Place.tabelogImgs(params[:search])
-      @rettyTitles = Place.rettyTitles(params[:search])
+      @rettyContents = Place.rettyContents(params[:search])
+      @ikkyuContents = Place.ikkyuContents(params[:search])
     else
       @places = Place.all
     end

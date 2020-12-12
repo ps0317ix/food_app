@@ -129,6 +129,26 @@ class Place < ApplicationRecord
     end
   end
 
+  def self.ikkyuContents(name)
+    # @tabelog = Place.services()
+    if @ikkyu = Place.find_by(name: name, service: "一休")
+      @ikkyuUrl = @ikkyu.link
+      @ikkyuDoc = Place.getDoc(@ikkyuUrl)
+      @ikkyuContents = @ikkyuDoc.xpath("//section[@class='restaurantName_2s_sg']")
+      return @ikkyuContents
+    end
+  end
+
+  def self.ikkyuTitles(name)
+    # @tabelog = Place.services()
+    if @ikkyu = Place.find_by(name: name, service: "一休")
+      @ikkyuUrl = @ikkyu.link
+      @ikkyuDoc = Place.getDoc(@ikkyuUrl)
+      @ikkyuContents = @ikkyuDoc.xpath("//h3[@class='restaurantName_2s_sg']")
+      return @ikkyuContents
+    end
+  end
+
 
 
 
