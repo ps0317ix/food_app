@@ -2,7 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.ranking_result{
+  padding-top:50px;
+}
+
 .ranking_result_img{
-  width: 330px;
+  width: 220px;
   object-fit: cover;
+}
+
+.ranking_result li{
+  margin: 5px 0px;
+  padding: 0px 10px;
 }

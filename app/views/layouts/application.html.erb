@@ -16,7 +16,7 @@
     <header>
       <div class="header-logo">
         <% if @current_user %>
-          <%= link_to("FoodApp", "/posts/index") %>
+          <%= link_to("FoodApp", "/") %>
         <% else %>
           <%= link_to("FoodApp", "/") %>
         <% end %>
@@ -47,8 +47,10 @@
       </div>
     <% end %>
     <%= yield %>
+
     </div>
   </body>
+  <%= javascript_pack_tag 'hello_vue' %>
   <script type="text/javascript">
     // const {Slide} = window['vue-burger-menu'];
     // Vue.component('slide', Slide);

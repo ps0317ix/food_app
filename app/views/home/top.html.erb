@@ -1,4 +1,10 @@
+
+
 <div class="main top-main">
+  <div id='hello'>
+    {{message}}
+    <app></app>
+  </div>
   <div class="top-message">
     <p>東京の主要駅を入力して検索</p>
     <%= form_tag("/search_exe",:method => 'get') do %>
@@ -12,7 +18,7 @@
   </div>
   <div class="">
 
-    <div class="top-ranking" style="padding-top:50px;">
+    <div class="ranking_result" style="padding-top:50px;">
       <h3>東京の食べログランキング</h3>
       <ul>
       <% @cnt = 1
@@ -32,18 +38,5 @@
 </div>
 
 <script type="text/javascript">
-  new Vue({
-    el: '#app',
-    data: {
-      isActive: true
-    },
-    computed: {
-      classObject: function(){
-        return{
-          red: this.isActive,
-          'bg-blue': this.isActive
-        }
-      }
-    }
-  })
+
 </script>

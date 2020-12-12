@@ -12,7 +12,7 @@
     if params[:search]
       @places.each do |place|
         %>
-        <div class="ranking_result" style="padding-top:50px;">
+        <div class="ranking_result">
         <h3><%= place.service %></h3>
         <ul>
           <%
@@ -36,8 +36,10 @@
 
                # tabelogImg = tabelogContent.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
               <li>
-                <p><%= @cnt %>位　<%= link_to tabelogTitle.text, tabeloghref %></p>
-                <img src="<%= @tabelogImg %>" class="ranking_result_img">
+                <a href="<%= tabeloghref %>">
+                  <p><%= @cnt %>位　<%= tabelogTitle.text %></p>
+                  <img src="<%= @tabelogImg %>" class="ranking_result_img">
+                </a>
               </li>
               <% @cnt += 1
             end
