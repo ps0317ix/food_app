@@ -5,33 +5,38 @@
       %>
       <div class="" style="padding-top:50px;">
       <h3><%= place.service %></h3>
-
       <%
-      if place.service == '食べログ'
-         @cnt = 1
-          @tabelogContents.each do |content| %>
-          <% tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
-            tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
-          <li>
-            <p><%= @cnt %>位　<%= link_to tabelogTitle.text, tabelogTitle.attribute("href").text %></p>
-            <img src="<%= tabelogImg %>">
-          </li>
-          <% @cnt += 1
+        if place.service == '食べログ'
+           @cnt = 1
+            @tabelogContents.each do |content| %>
+            <% @tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
+              @tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src")
+              @tabelogPlace = content.xpath(".//img[@class='list-rst__area-genre cpy-area-genre'']")%>
+            <li>
+              <div class="ranking_title">
+                <h5><%= @cnt %>位　<%= link_to @tabelogTitle.text, tabelogTitle.attribute("href").text %></h5>
+                <img src="<%= @tabelogImg %>">
+              </div>
+              <div class="ranking_content">
+                <p><%= @tabelogPlace.text %></p>
+              </div>
+            </li>
+            <% @cnt += 1
+            end
+        end
+        if place.service == '一休' %>
+        <%  @ikkyuTitles.each do |title| %>
+            <p><%= title.text %></p>
+          <%
           end
-      end
-      if place.service == 'Retty' %>
-      <%  @rettyTitles.each do |title| %>
-          <p><%= title.text %></p>
-        <%
         end
-      end
-      if place.service == '一休' %>
-      <%  @ikkyuTitles.each do |title| %>
-          <p><%= title.text %></p>
-        <%
+        if place.service == 'Retty' %>
+          <% @rettyTitles.each do |title| %>
+            <p><%= title.text %></p>
+          <% end
         end
-      %></div><%
-      end
-    end %>
+        %></div><%
+       end
+      %>
   </div>
 </div>

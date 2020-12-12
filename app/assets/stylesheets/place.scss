@@ -6,12 +6,32 @@
   padding-top:50px;
 }
 
+.ranking_service_title{
+  width: 100%;
+}
+
 .ranking_result_img{
   width: 220px;
+  height: 123px;
   object-fit: cover;
 }
 
 .ranking_result li{
+  width: 100%;
   margin: 5px 0px;
-  padding: 0px 10px;
+  padding: 0px 10px 10px 0px;
+}
+
+.ranking_result a{
+  display: block;
+  width: 100%;
+  display: flex;
+}
+
+.ranking_title{
+  width: 35%;
+}
+
+.ranking_content{
+  width: 65%;
 }
