@@ -14,8 +14,9 @@ class PlaceController < ApplicationController
     @services = Place.services(name: params[:name])
     @tabelog = Place.find_by(name: params[:name], service: "食べログ")
     @retty = Place.find_by(name: params[:name], service: "Retty")
+    @tabelogContents = Place.tabelogContents(params[:name])
     @tabelogTitles = Place.tabelogTitles(params[:name])
-    @tabelogImgs = Place.tabelogImgs(params[:name], @tabelogTitles)
+    @tabelogImgs = Place.tabelogImgs(params[:name])
     @rettyTitles = Place.rettyTitles(params[:name])
   end
 
@@ -32,6 +33,7 @@ class PlaceController < ApplicationController
 
   def search
     @allPlaces = Place.all
+    @tabelogs = Place.where(service: "食べログ")
     if params[:search]
       @places = Place.search(params[:search])
       @services = Place.services(params[:search])

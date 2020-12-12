@@ -27,7 +27,7 @@ class Place < ApplicationRecord
 
     # Nokogiri で切り分け
     # @contents = Nokogiri::HTML.parse(html,nil,charset)
-    @doc = Nokogiri::HTML(open(@tabelogUrl))
+    @doc = Nokogiri::HTML(open(link))
     return @doc
   end
 
@@ -112,7 +112,7 @@ class Place < ApplicationRecord
     if @retty = Place.find_by(name: name, service: "Retty")
       @rettyUrl = @retty.link
       @rettyDoc = Place.getDoc(@rettyUrl)
-      @rettyTitles = @rettyDoc.css("//h3[@class='restaurant__name']")
+      @rettyTitles = @rettyDoc.xpath("//h3[@class='restaurant__name']")
       return @rettyTitles
     else
       return "データがありません"

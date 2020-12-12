@@ -22,9 +22,9 @@
       elsif place.service == '食べログ' then %>
       <ul>
       <% @cnt = 1
-          @tabelogContents.each do |content| %>
-          <% tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
-            tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
+          @tabelogContents.each do |content|
+           tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
+           tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
           <li>
             <p><%= @cnt %>位　<%= link_to tabelogTitle.text, tabelogTitle.attribute("href").text %></p>
             <img src="<%= tabelogImg %>">
@@ -36,11 +36,11 @@
       </div><%
       end
     else %>
-      <div class="available">
+    <div class="available">
         <h3>検索可能エリア一覧</h3>
-        <% @allPlaces.each do |place|%>
-          <%= link_to "#{place.name}", "/search_exe?utf8=✓&search=#{place.name}" %>
-    <% end %>
+        <% @tabelogs.each do |tabelog|%>
+          <%= link_to "#{tabelog.name}", "/search_exe?utf8=✓&search=#{tabelog.name}" %>
+        <% end %>
     </div>
     <% end
     %>

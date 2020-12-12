@@ -7,20 +7,21 @@
       <h3><%= place.service %></h3>
 
       <%
-      if @tabelog
-        @tabelogTitles.each do |tabelogtitle|
-        %>
-          <p><%= tabelogtitle.text %></p>
-        <%
-        end
-        @tabelogImgs.each do |tabelogImg|%>
-        <p><%= tabelogImg %></p>
-          <img src="<%= "#{tabelogImg}" %>" alt="">
-      <% end
+      if place.service == '食べログ'
+         @cnt = 1
+          @tabelogContents.each do |content| %>
+          <% tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
+            tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
+          <li>
+            <p><%= @cnt %>位　<%= link_to tabelogTitle.text, tabelogTitle.attribute("href").text %></p>
+            <img src="<%= tabelogImg %>">
+          </li>
+          <% @cnt += 1
+          end
       end
-      if @retty
-        @rettyTitles.each do |title|
-        %>
+      if place.service == 'Retty' %>
+      <%  @rettyTitles.each do |title| %>
+
           <p><%= title.text %></p>
         <%
         end
@@ -28,7 +29,7 @@
       end
     end
 
-    link = "https://tabelog.com/tokyo/A1312/A131201/R3373/rstLst/?SrtT=rt&Srt=D&sort_mode=1"
+    link = "https://retty.me/restaurant-search/search-result/?latlng=35.689729%2C139.700464&free_word_area=%E6%96%B0%E5%AE%BF%E9%A7%85&station_id=1376"
     charset = nil
 
     html = open(link) do |page|
@@ -40,12 +41,11 @@
 
     # Nokogiri で切り分け
     @tabelogDoc = Nokogiri::HTML(open(link))
-    @tabelogImgs = @tabelogDoc.xpath("//img[@class='js-thumbnail-img']").attribute('src')
-    
+    @tabelogImgs = @tabelogDoc.xpath("//h3[@class='restaurant__name']")
+
     @tabelogImgs.each do |tabelogImg| %>
     <p>テスト</p>
-    <p><%= tabelogImgs.value %></p>
-      <img src="<%= tabelogImgs.value %>" alt="">
+      <p><%= tabelogImgs.text %></p>
   <% end %>
   </div>
 </div>
