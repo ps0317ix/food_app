@@ -85,22 +85,18 @@ class Place < ApplicationRecord
     if @tabelog = Place.find_by(name: name, service: "食べログ")
       @tabelogUrl = @tabelog.link
       @tabelogDoc = Place.getDoc(@tabelogUrl)
-      @tabelogImgs = []
-      @tabelogTitles.each do |tabelogTitle|
-        @tabelogImg = @tabelogDoc.xpath("//img[@alt='#{tabelogTitle}']").attribute("src")
-        @tabelogImgs.append(@tabelogImg)
+      @tabelogImgs = @tabelogDoc.css("img.p-main-photos__slider-image").attribute("src")
+      if not @tabelogImgs
+        @tabelogImgs = @tabelogDoc.css("a.js-imagebox-trigger img").attribute('src')
       end
-      puts @tabelogImgs
       return @tabelogImgs
     else
       @tabelogUrl = 'https://tabelog.com/tokyo/rstLst/?SrtT=rt&Srt=D&sort_mode=1'
       @tabelogDoc = Place.getDoc(@tabelogUrl)
-      @tabelogImgs = []
-      tabelogTitles.each do |tabelogTitle|
-        @tabelogImg = @tabelogDoc.xpath("//img[@alt='#{tabelogTitle}']").attribute("src")
-        @tabelogImgs.append(@tabelogImg)
+      @tabelogImgs = @tabelogDoc.css("img.p-main-photos__slider-image").attribute("src")
+      if not @tabelogImgs
+        @tabelogImgs = @tabelogDoc.css("a.js-imagebox-trigger img").attribute('src')
       end
-      puts @tabelogImgs
       return @tabelogImgs
     end
   end

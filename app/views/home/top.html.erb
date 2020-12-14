@@ -1,10 +1,6 @@
 
 
 <div class="main top-main">
-  <div id='hello'>
-    {{message}}
-    <app></app>
-  </div>
   <div class="top-message">
     <p>東京の主要駅を入力して検索</p>
     <%= form_tag("/search_exe",:method => 'get') do %>
@@ -17,26 +13,75 @@
     </div> -->
   </div>
   <div class="">
-
-    <div class="ranking_result" style="padding-top:50px;">
-      <h3>東京の食べログランキング</h3>
+    <h3>東京の食べログランキング</h3>
+    <div class="ranking_result container-fluid" id="app" style="padding-top:50px;">
       <ul>
-      <% @cnt = 1
-          @tabelogContents.each do |content| %>
-          <% tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
-            tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
+        <template v-for="(item, i) in items">
           <li>
-            <p><%= @cnt %>位　<%= link_to tabelogTitle.text, tabelogTitle.attribute("href").text %></p>
-            <img src="<%= tabelogImg %>">
+            <p>{{i+1}}位　{{ item.name }}</p>
           </li>
-          <% @cnt += 1
-          end
-        %>
+        </template>
       </ul>
+      <paginate
+        :page-count="getPageCount"
+        :page-range="3"
+        :margin-pages="2"
+        :click-handler="clickCallback"
+        :prev-text="'＜'"
+        :next-text="'＞'"
+        :container-class="'pagination'"
+        :page-class="'page-item'">
+      </paginate>
     </div>
   </div>
 </div>
 
 <script type="text/javascript">
 
+  var shopNames = [];
+  var images = [];
+  var hrefs = [];
+
+  <% @tabelogContents.each do |content|
+      @tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")%>
+
+      shopNames.push('<%= @tabelogTitle.text %>');
+      hrefs.push('<%= @tabelogTitle.attribute("href").text %>');
+  <% end %>
+
+  <% @tabelogImgs.each do |tabelogImg| %>
+    images.push(<%= tabelogImg %>)
+  <% end %>
+
+
+  Vue.component('paginate', VuejsPaginate)
+
+  new Vue({
+     el: '#app',
+     data: {
+       parPage: 5,
+       currentPage: 1,
+       items: [
+         <% @tabelogContents.each do |content|
+             @tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")%>
+               {name:'<%= @tabelogTitle.text %>', link: '<%= @tabelogTitle.attribute("href") %>',},
+         <% end %>
+       ]
+     },
+     methods: {
+      clickCallback: function (pageNum) {
+         this.currentPage = Number(pageNum);
+      }
+     },
+     computed: {
+       getItems: function() {
+        let current = this.currentPage * this.parPage;
+        let start = current - this.parPage;
+        return this.items.slice(start, current);
+       },
+       getPageCount: function() {
+        return Math.ceil(this.items.length / this.parPage);
+       }
+     }
+   })
 </script>
