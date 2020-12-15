@@ -18,7 +18,10 @@
       <ul>
         <template v-for="(item, i) in items">
           <li>
-            <p>{{i+1}}位　{{ item.name }}</p>
+            <a :href="item.href">
+              <p>{{i+1}}位　{{ item.name }}</p>
+              <img v-bind:src="item.img" alt="">
+            </a>
           </li>
         </template>
       </ul>
@@ -38,21 +41,6 @@
 
 <script type="text/javascript">
 
-  var shopNames = [];
-  var images = [];
-  var hrefs = [];
-
-  <% @tabelogContents.each do |content|
-      @tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")%>
-
-      shopNames.push('<%= @tabelogTitle.text %>');
-      hrefs.push('<%= @tabelogTitle.attribute("href").text %>');
-  <% end %>
-
-  <% @tabelogImgs.each do |tabelogImg| %>
-    images.push(<%= tabelogImg %>)
-  <% end %>
-
 
   Vue.component('paginate', VuejsPaginate)
 
@@ -63,8 +51,22 @@
        currentPage: 1,
        items: [
          <% @tabelogContents.each do |content|
-             @tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")%>
-               {name:'<%= @tabelogTitle.text %>', link: '<%= @tabelogTitle.attribute("href") %>',},
+             @tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
+             tabeloghref = @tabelogTitle.attribute("href")
+             charset = nil
+             html = open(tabeloghref) do |page|
+               #charsetを自動で読み込み、取得
+               charset = page.charset
+               #中身を読む
+               page.read
+             end
+             @tabelogDoc = Nokogiri::HTML(open(tabeloghref))
+             tabelogImg = @tabelogDoc.css("img.p-main-photos__slider-image").attribute("src")
+             if not tabelogImg
+               tabelogImg = @tabelogDoc.css("a.js-imagebox-trigger img").attribute('src')
+             end
+             %>
+             {name:'<%= @tabelogTitle.text %>', href: '<%= tabeloghref %>', img: '<%= tabelogImg %>'},
          <% end %>
        ]
      },
@@ -81,7 +83,7 @@
        },
        getPageCount: function() {
         return Math.ceil(this.items.length / this.parPage);
-       }
+      },
      }
    })
 </script>

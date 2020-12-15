@@ -24,7 +24,6 @@ class HomeController < ApplicationController
       end
       @tabelogDoc = Nokogiri::HTML(open(@tabelogUrl))
       @tabelogContents = @tabelogDoc.xpath("//div[@class='list-rst__wrap js-open-new-window']")
-      @tabelogImgs = @tabelogDoc.css("img.js-cassette-img").attribute("src")
     end
   end
 
