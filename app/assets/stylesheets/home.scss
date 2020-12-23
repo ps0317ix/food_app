@@ -164,9 +164,36 @@ header {
   background-color: #fff;
 }
 
+.ranking_results{
+  width: 100%;
+}
 
+.ranking_result{
+  display: flex;
+  margin: 0 auto;
+  width: 75%;
+  background: #fff;
+}
 
+.ranking_result_img{
+  display: block;
+  width: 25%;
+}
 
+.ranking_result img{
+  width: 100%;
+}
+
+.ranking_result_content{
+  display: block;
+  width: 75%;
+  padding: 10px;
+}
+
+.ranking_result_content h2{
+  font-weight: bold;
+  text-align: left;
+}
 
 
 /* about ================================ */
