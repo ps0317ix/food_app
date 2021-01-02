@@ -24,6 +24,17 @@ class HomeController < ApplicationController
       end
       @tabelogDoc = Nokogiri::HTML(open(@tabelogUrl))
       @tabelogContents = @tabelogDoc.xpath("//div[@class='list-rst__wrap js-open-new-window']")
+
+      # @ikkyuUrl = 'https://restaurant.ikyu.com/area/tokyo/'
+      # charset = nil
+      # html = open(@ikkyuUrl) do |page|
+      #   #charsetを自動で読み込み、取得
+      #   charset = page.charset
+      #   #中身を読む
+      #   page.read
+      # end
+      # @ikkyuDoc = Nokogiri::HTML(open(@ikkyuUrl))
+      # @ikkyuContents = @ikkyuDoc.xpath("//section[@class='restaurantCard_jpBMy']")
     end
   end
 

@@ -8,102 +8,44 @@
     <% end %>
 
 
-    <%
-    if params[:search]
-      @places.each do |place|
-        %>
-        <div class="ranking_result">
-          <div class="ranking_service_title">
-            <h3><%= place.service %></h3>
-          </div>
-        <div id="app">
-          <ul>
-            <%
-            if place.service == '食べログ' then %>
-                <% @cnt = 1
-                @tabelogContents.each do |tabelogContent|
-                 tabelogTitle = tabelogContent.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
-                 tabeloghref = tabelogTitle.attribute("href").text
-                 tabelogPlace = tabelogContent.xpath(".//div[@class='list-rst__area-genre cpy-area-genre']")
-                 charset = nil
-                 html = open(tabeloghref) do |page|
-                   #charsetを自動で読み込み、取得
-                   charset = page.charset
-                   #中身を読む
-                   page.read
-                 end
-                 @tabelogDoc = Nokogiri::HTML(open(tabeloghref))
-                 @tabelogImg = @tabelogDoc.css("img.p-main-photos__slider-image").attribute("src")
-                 if not @tabelogImg
-                   @tabelogImg = @tabelogDoc.css("a.js-imagebox-trigger img").attribute('src')
-                 end
-                 # tabelogImg = tabelogContent.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src") %>
-                 <li v-for="item in getItems">
-                   {{item}}
-                   <a href="<%= tabelogTitle.attribute("href").text %>">
-                     <div class="ranking_title">
-                       <h4><%= @cnt %>位　<%= tabelogTitle.text %></h4>
-                       <img src="<%= @tabelogImg %>" class="ranking_result_img">
-                     </div>
-                     <div class="ranking_content">
-                       <p><%= tabelogPlace.text %></p>
-                     </div>
-                   </a>
-                 </li>
-                <% @cnt += 1
-              end
-            end
-            if place.service == '一休' then %>
-                <% @cnt = 1
-                @ikkyuContents.each do |content|
-                @ikkyuhref = content.xpath(".//a[@class='cover_3Ae77']").attribute("href")
-                @ikkyuTitle = content.xpath(".//h3[@class='restaurantName_2s_sg']")
-                charset = nil
-                html = open(place.link) do |page|
-                  #charsetを自動で読み込み、取得
-                  charset = page.charset
-                  #中身を読む
-                  page.read
-                end
-                @ikkyuDoc = Nokogiri::HTML(open(place.link))
-                @ikkyuImg = @ikkyuDoc.css("img.image_3ZIQh").attribute('src') %>
-                <li v-for="item in getItems">
-                  {{item}}
-                  <a href="https://restaurant.ikyu.com/<%= @ikkyuhref.value %>">
-                    <div class="ranking_title">
-                      <h4><%= @cnt %>位　<%= @ikkyuTitle.text %></h4>
-                      <img src="<%= @ikkyuImg %>" class="ranking_result_img">
-                    </div>
-                    <div class="ranking_content">
-                    </div>
-                  </a>
-                </li>
-                <% @cnt += 1
-              end
-            end
-            if place.service == 'Retty' then
-              @rettyContents.each do |rettyContent| %>
-              <li>
-
-                <p><%= rettyContent.xpath("//h3[@class='restaurant__name']").text %></p>
+    <% if params[:search] %>
+    <div class="rankings tabelog_rankings">
+      <div class="ranking_results" id="tabelog_ranking" style="padding-top:50px;">
+        <h3 style="padding:10px 0px;"><%= params[:search] %>の食べログランキング</h3>
+        <ul>
+          <template v-for="item in getItems">
+            <a :href="item.href">
+              <li class="ranking_result">
+                  <div class="ranking_result_img">
+                    <v-lazy-image :src="item.img" :src-placeholder="item.img" ></v-lazy-image>
+                  </div>
+                  <div class="ranking_result_content">
+                    <h2>{{item.no}}位　{{ item.name }}</h2>
+                  </div>
               </li>
-            <% end
-            end
-            %>
-          </ul>
+            </a>
+          </template>
+        </ul>
+        <paginate
+          :page-count="getPageCount"
+          :page-range="3"
+          :margin-pages="2"
+          :click-handler="clickCallback"
+          :prev-text="'＜'"
+          :next-text="'＞'"
+          :container-class="'pagination'"
+          :page-class="'page-item'">
+        </paginate>
+      </div>
+    </div>
+    <% end %>
 
-        </div>
-      </div><%
-      end
-    else %>
     <div class="available">
         <h3>検索可能エリア一覧</h3>
         <% @tabelogs.each do |tabelog|%>
           <%= link_to "#{tabelog.name}", "/search_exe?utf8=✓&search=#{tabelog.name}" %>
         <% end %>
     </div>
-    <% end
-    %>
     <ul>
       <h3>食べログのランキングページ一覧</h3>
       <%
@@ -117,14 +59,6 @@
     </ul>
     <ul>
       <h3>Rettyのランキングページ一覧</h3>
-      <% @allPlaces.each do |place|
-        if place.service == 'Retty' %>
-        <li>
-          <p><%= link_to "#{place.name}エリアのランキングページはこちら", place.link %></p>
-        </li>
-      <% end
-       end
-      %>
     </ul>
     <ul>
       <h3>一休のランキングページ一覧</h3>
@@ -133,12 +67,45 @@
         <li>
           <p><%= link_to "#{place.name}エリアのランキングページはこちら", place.link %></p>
         </li>
-      <% end
-       end
-      %>
+        <% end
+      end %>
     </ul>
   </div>
 </div>
 <script type="text/javascript">
 
+    const VLazyImagePlugin = window['VLazyImage'].VLazyImagePlugin;
+    Vue.use(VLazyImagePlugin);
+
+    Vue.component('paginate', VuejsPaginate)
+
+    new Vue({
+       el: '#tabelog_ranking',
+       data: {
+         parPage: 5,
+         currentPage: 1,
+         tabelogitems: [
+           <% @cnt = 1
+           @Shops.each do |shop| %>
+               {no: <%= @cnt %>, name: "<%= shop.name %>", href: "<%= shop.link %>", img: "<%= shop.img %>", jenle: "<%= shop.jenre %>"},
+           <% @cnt += 1
+           end %>
+         ]
+       },
+       methods: {
+        clickCallback: function (pageNum) {
+           this.currentPage = Number(pageNum);
+        }
+       },
+       computed: {
+         getItems: function() {
+          let current = this.currentPage * this.parPage;
+          let start = current - this.parPage;
+          return this.tabelogitems.slice(start, current);
+         },
+         getPageCount: function() {
+          return Math.ceil(this.tabelogitems.length / this.parPage);
+        },
+       }
+     })
 </script>

@@ -13,7 +13,11 @@ Rails.application.routes.draw do
   post 'place/create' => "place#create"
   get "place/:name" => "place#show"
   get "insert" => "place#new"
+
+  # 店舗関連
   get 'shop/index' => "shop#index"
+  get 'shop/edit' => "shop#edit"
+  post "shop/:id/update" => "shop#update"
 
   # いいね機能関連
   post "likes/:post_id/create" => "likes#create"

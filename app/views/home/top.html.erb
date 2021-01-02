@@ -12,9 +12,9 @@
       <button @click="isActive = !isActive">switch</button>
     </div> -->
   </div>
-  <div class="">
-    <h3 style="padding:10px 0px;">東京の食べログランキング</h3>
-    <div class="ranking_results" id="app" style="padding-top:50px;">
+  <div class="rankings tabelog_rankings">
+    <div class="ranking_results" id="tabelog_ranking" style="padding-top:50px;">
+      <h3 style="padding:10px 0px;">東京の食べログランキング</h3>
       <ul>
         <template v-for="item in getItems">
           <a :href="item.href">
@@ -42,7 +42,6 @@
     </div>
   </div>
 </div>
-
 <script type="text/javascript">
 
   const VLazyImagePlugin = window['VLazyImage'].VLazyImagePlugin;
@@ -51,14 +50,14 @@
   Vue.component('paginate', VuejsPaginate)
 
   new Vue({
-     el: '#app',
+     el: '#tabelog_ranking',
      data: {
        parPage: 5,
        currentPage: 1,
-       items: [
+       tabelogitems: [
          <% @cnt = 1
            @tabelogContents.each do |content|
-             if @cnt == 6
+             if @cnt == 11
                break
              end
              @tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
@@ -75,9 +74,10 @@
              if not tabelogImg
                tabelogImg = @tabelogDoc.css("a.js-imagebox-trigger img").attribute('src')
              end
-
+             @tabelogJanle = @tabelogDoc.at_css('#rst-data-head > table:nth-child(2) > tbody > tr:nth-child(3) > td > span')
+             # tabelogMap = @tabelogDoc.at_css("img.rstinfo-table__map-image").attribute("src")
              %>
-             {no: <%= @cnt %>, name:'<%= @tabelogTitle.text %>', href: '<%= tabeloghref %>', img: '<%= tabelogImg %>'},
+             {no: <%= @cnt %>, name:'<%= @tabelogTitle.text %>', href: "<%= tabeloghref %>", img: "<%= tabelogImg %>", janle: "<%= @tabelogJanle.text %>"},
          <% @cnt += 1
          end %>
        ]
@@ -91,13 +91,14 @@
        getItems: function() {
         let current = this.currentPage * this.parPage;
         let start = current - this.parPage;
-        return this.items.slice(start, current);
+        return this.tabelogitems.slice(start, current);
        },
        getPageCount: function() {
-        return Math.ceil(this.items.length / this.parPage);
+        return Math.ceil(this.tabelogitems.length / this.parPage);
       },
      }
    })
+
 
 
 </script>

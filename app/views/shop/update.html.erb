@@ -14,7 +14,12 @@
           <td><p><%=place.id %></p></td>
           <td><p><%=place.name %></p></td>
           <td><p><%=place.service %></p></td>
-          <td><p><%=place.update_at %></p></td>
+          <td><p><%=place.updated_at %></p></td>
+          <td>
+            <%= form_tag("/shop/#{@place.id}/update",{multipart: true}) do %>
+              <input type="submit" value="更新">
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </table>

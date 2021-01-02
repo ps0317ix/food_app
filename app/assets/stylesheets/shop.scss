@@ -1,3 +1,66 @@
 // Place all the styles related to the shop controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+td p{
+  padding: 5px 10px;
+}
+
+body {
+  color: #2d3133;
+  background-color: rgb(255, 179, 0);
+  margin: 0;
+  min-height: 1vh;
+}
+
+.main {
+  position: absolute;
+  top: 64px;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  background-color: #f5f8fa;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding-left: 15px;
+  padding-right: 15px;
+  clear: both;
+}
+
+.ranking_results{
+  width: 100%;
+}
+
+.ranking_result{
+  display: flex;
+  margin: 0 auto;
+  width: 75%;
+  background: #fff;
+  border: 1px solid rgb(255, 179, 0);
+}
+
+.ranking_result_img{
+  display: block;
+  width: 25%;
+}
+
+.ranking_result img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ranking_result_content{
+  display: block;
+  width: 75%;
+  padding: 10px;
+}
+
+.ranking_result_content h2{
+  font-weight: bold;
+  text-align: left;
+}

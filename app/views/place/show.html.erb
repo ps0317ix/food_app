@@ -1,42 +1,71 @@
 <div class="main user-show">
-  <div class="container">
-    <%
-    @places.each do |place|
-      %>
-      <div class="" style="padding-top:50px;">
-      <h3><%= place.service %></h3>
-      <%
-        if place.service == '食べログ'
-           @cnt = 1
-            @tabelogContents.each do |content| %>
-            <% @tabelogTitle = content.xpath(".//a[@class='list-rst__rst-name-target cpy-rst-name js-ranking-num']")
-              @tabelogImg = content.xpath(".//img[@class='js-thumbnail-img js-cassette-img js-analytics lazy-loaded']").attribute("src")
-              @tabelogPlace = content.xpath(".//img[@class='list-rst__area-genre cpy-area-genre'']")%>
-            <li>
-              <div class="ranking_title">
-                <h5><%= @cnt %>位　<%= link_to @tabelogTitle.text, tabelogTitle.attribute("href").text %></h5>
-                <img src="<%= @tabelogImg %>">
-              </div>
-              <div class="ranking_content">
-                <p><%= @tabelogPlace.text %></p>
-              </div>
+  <div class="rankings tabelog_rankings">
+    <div class="ranking_results" id="tabelog_ranking" style="padding-top:50px;">
+      <h3 style="padding:10px 0px;"><%= params[:name] %>の食べログランキング</h3>
+      <ul>
+        <template v-for="item in getItems">
+          <a :href="item.href">
+            <li class="ranking_result">
+                <div class="ranking_result_img">
+                  <v-lazy-image :src="item.img" :src-placeholder="item.img" ></v-lazy-image>
+                </div>
+                <div class="ranking_result_content">
+                  <h2>{{item.no}}位　{{ item.name }}</h2>
+                </div>
             </li>
-            <% @cnt += 1
-            end
-        end
-        if place.service == '一休' %>
-        <%  @ikkyuTitles.each do |title| %>
-            <p><%= title.text %></p>
-          <%
-          end
-        end
-        if place.service == 'Retty' %>
-          <% @rettyTitles.each do |title| %>
-            <p><%= title.text %></p>
-          <% end
-        end
-        %></div><%
-       end
-      %>
+          </a>
+        </template>
+      </ul>
+      <paginate
+        :page-count="getPageCount"
+        :page-range="3"
+        :margin-pages="2"
+        :click-handler="clickCallback"
+        :prev-text="'＜'"
+        :next-text="'＞'"
+        :container-class="'pagination'"
+        :page-class="'page-item'">
+      </paginate>
+    </div>
   </div>
 </div>
+<script type="text/javascript">
+
+  const VLazyImagePlugin = window['VLazyImage'].VLazyImagePlugin;
+  Vue.use(VLazyImagePlugin);
+
+  Vue.component('paginate', VuejsPaginate)
+
+  new Vue({
+     el: '#tabelog_ranking',
+     data: {
+       parPage: 5,
+       currentPage: 1,
+       tabelogitems: [
+         <% @cnt = 1
+         @Shops.each do |shop| %>
+             {no: <%= @cnt %>, name: "<%= shop.name %>", href: "<%= shop.link %>", img: "<%= shop.img %>", jenle: "<%= shop.jenre %>"},
+         <% @cnt += 1
+         end %>
+       ]
+     },
+     methods: {
+      clickCallback: function (pageNum) {
+         this.currentPage = Number(pageNum);
+      }
+     },
+     computed: {
+       getItems: function() {
+        let current = this.currentPage * this.parPage;
+        let start = current - this.parPage;
+        return this.tabelogitems.slice(start, current);
+       },
+       getPageCount: function() {
+        return Math.ceil(this.tabelogitems.length / this.parPage);
+      },
+     }
+   })
+
+
+
+</script>
